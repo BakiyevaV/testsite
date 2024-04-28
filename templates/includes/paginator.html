@@ -1,0 +1,42 @@
+{% if page_obj.has_other_pages %}
+<nav class='pagination_wrapper' aria-label="pagination">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.start_index }}" aria-label="Первая">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая">
+                <span class="page-link disabled">...</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% with start_page=page_obj.number|add:"-1" end_page=page_obj.number|add:"1" %}
+        {% for page in page_obj.paginator.page_range %}
+        {% if page >= start_page and page <= end_page %}
+        <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% endwith %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая">
+                <span class="page-link disabled">...</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Последняя">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+
+</nav>
+{% endif %}

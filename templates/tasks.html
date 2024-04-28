@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body>
+    <form method="POST">
+        <textarea></textarea>
+        <button type="submit">Сохранить</button>
+    </form>
+<script>
+    async function getAllTasks(){
+        try{ const response = await fetch('http://127.0.0.1:8080/api/tasks/')
+            if (!response.ok){
+                throw new Error('Request failed');
+            } else {
+                const data = await response.json();
+                console.log(data)
+                return data
+            }
+        } catch (error){
+            console.error(error)
+        }
+    }
+    async function fetchData() {
+        const tasks = await getAllTasks();
+        if (tasks){
+            const queryset = tasks.queryset;
+            console.log(tasks);
+            console.log(queryset);
+            let list = document.createElement('ol')
+            let total = document.createElement('ul')
+            let rows = ''
+            queryset.forEach(element => {
+                console.log(element)
+                let status
+                switch(element.status){
+                    case 'n':
+                        status = 'Не начато' 
+                        break
+                    case 'd':
+                        status = 'Исполнено' 
+                        break
+                    case 'p':
+                        status = 'На исполнении' 
+                        break
+                    
+                }
+                rows += `<li>Наименование: ${element.title}- Статус: ${status} - Срок исполнения: ${element.deadline}</li>`
+            });
+            list.innerHTML = rows
+
+            let totals = `  <li>Всего задач: ${tasks.total_tasks_count}</li>
+                            <li>В работе: ${tasks.in_process_tasks_count}</li>
+                            <li>Закончено: ${tasks.done_tasks_count}</li>
+                            <li>Не начато: ${tasks.not_started_tasks_count}</li>`
+
+            total.innerHTML = totals
+            document.body.appendChild(list)
+            document.body.appendChild(total)
+        }
+       
+    }
+    fetchData();
+    let form = document.querySelector('form')
+    form.addEventListener('submit', async function (){
+        event.preventDefault()
+        
+        let textarea = form.querySelector('textarea')
+        console.log(textarea.value)
+        try{ const response = await fetch('http://127.0.0.1:8080/api/subscribe/',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({email: textarea.value})
+        })
+            if (!response.ok){
+                throw new Error('Request failed');
+            } else {
+                console.log('Success!')
+            }
+        } catch (error){
+            console.error(error)
+        }
+
+    })
+</script>
+</body>
+
+</html>

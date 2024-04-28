@@ -1,0 +1,58 @@
+
+<nav class="amado-nav">
+    <ul>
+        {% if active_page == 'all tasks' %}
+            <li class="active"><a href="{% url 'taskboard:all_tasks' %}">All tasks</a></li>
+            <li class=""><a href="{% url 'taskboard:create_task' %}">Create task</a></li>
+            <li class=""><a href="{% url 'taskboard:edit_task' %}">Edit task</a></li>
+            <li class=""><a href="{% url 'taskboard:icecream' %}">Icecream</a></li>
+            <li class=""><a href="{% url 'taskboard:create_icecream' %}">Create Icecream</a></li>
+
+        {% elif active_page == 'create task' %}
+            <li class=""><a href="{% url 'taskboard:all_tasks' %}">All tasks</a></li>
+            <li class="active"><a href="{% url 'taskboard:create_task' %}">Create task</a></li>
+            <li class=""><a href="{% url 'taskboard:edit_task' %}">Edit task</a></li>
+            <li class=""><a href="{% url 'taskboard:icecream' %}">Icecream</a></li>
+            <li class=""><a href="{% url 'taskboard:create_icecream' %}">Create Icecream</a></li>
+
+        {% elif active_page == 'icecream' %}
+            <li class=""><a href="{% url 'taskboard:all_tasks' %}">All tasks</a></li>
+            <li class=""><a href="{% url 'taskboard:create_task' %}">Create task</a></li>
+            <li class=""><a href="{% url 'taskboard:edit_task' %}">Edit task</a></li>
+            <li class="active"><a href="{% url 'taskboard:icecream' %}">Icecream</a></li>
+            <li class=""><a href="{% url 'taskboard:create_icecream' %}">Create Icecream</a></li>
+
+        {% elif active_page == 'create icecream' %}
+            <li class=""><a href="{% url 'taskboard:all_tasks' %}">All tasks</a></li>
+            <li class=""><a href="{% url 'taskboard:create_task' %}">Create task</a></li>
+            <li class=""><a href="{% url 'taskboard:edit_task' %}">Edit task</a></li>
+            <li class=""><a href="{% url 'taskboard:icecream' %}">Icecream</a></li>
+            <li class="active"><a href="{% url 'taskboard:create_icecream' %}">Create Icecream</a></li>
+
+        {% elif active_page == 'Edit task' %}
+            <li class=""><a href="{% url 'taskboard:all_tasks' %}">All tasks</a></li>
+            <li class=""><a href="{% url 'taskboard:create_task' %}">Create task</a></li>
+            <li class="active"><a href="{% url 'taskboard:edit_task' %}">Edit task</a></li>
+            <li class=""><a href="{% url 'taskboard:icecream' %}">Icecream</a></li>
+            <li class=""><a href="{% url 'taskboard:create_icecream' %}">Create Icecream</a></li>
+        {% elif active_page == 'About task' %}
+            <li class=""><a href="{% url 'taskboard:all_tasks' %}">All tasks</a></li>
+            <li class=""><a href="{% url 'taskboard:create_task' %}">Create task</a></li>
+            <li class=""><a href="{% url 'taskboard:edit_task' %}">Edit task</a></li>
+            <li class=""><a href="{% url 'taskboard:icecream' %}">Icecream</a></li>
+            <li class=""><a href="{% url 'taskboard:create_icecream' %}">Create Icecream</a></li>
+        {% endif %}
+        <li><a href="../../../../../Downloads/amado/product-details.html"></a></li>
+        <li class=""><a href="cart.html"></a></li>
+        <li><a href="../../../../../Downloads/amado/checkout.html"></a></li>
+    </ul>
+    <!-- Button Group -->
+    <!-- Cart Menu -->
+    <!-- Social Button -->
+    <div class="social-info d-flex justify-content-between">
+        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+    </div>
+</nav>

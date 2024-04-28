@@ -1,0 +1,406 @@
+{% load static %}
+{% load bbcode_tags %}
+{% load filtersandtags %}
+
+{% if title == 'Create new task' %}
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+                        <div class="cart-title">
+                            <h2>Create Task</h2>
+                        </div>
+
+                        <form action="{% url 'taskboard:create_task' %}" method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            {{ cap_form.as_p }}
+                            {% if cap_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in cap_form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            {% for field in cap_form %}
+                                {% if field.errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in field.errors %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button style="margin-right: 20px; margin-left: 13px" class="btn amado-btn mb-15"
+                                    type="submit">Create
+                            </button>
+                            <a href="{% url 'taskboard:all_tasks' %}" class="btn amado-btn active">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+                {% include "includes/statistic.html" %}
+            </div>
+        </div>
+    </div>
+{% elif title == 'All tasks' %}
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="cart-title mt-50">
+                        <h2>All tasks</h2>
+                    </div>
+                    <form class="search_form" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="custom_button" type="submit" >Search</button>
+                    </form>
+                    <div class="cart-table clearfix">
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for task in tasks %}
+                            <tr>
+                                <td class="cart_product_img">
+                                    <a href="{% url 'taskboard:about_task' task.pk %}"><img
+                                            src="{% static 'img/img_.jpg' %}"></a>
+                                </td>
+                                <td class="cart_product_desc">
+                                    <a href="{% url 'taskboard:about_task' task.pk %}"><h5>{{ task.title|capfirst }}({{ task.title|transliterate }})</h5></a>
+                                </td>
+                                <td class="price">
+                                    <a href="{% url 'taskboard:about_task' task.pk %}"><span>To: {{ task.deadline|date:"d-m-Y" }}</span></a>
+                                </td>
+                                <td class="qty">
+                                    <a href="{% url 'taskboard:about_task' task.pk %}">
+                                        <span>Status: {% format_task_status task.status %}</span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            No available task
+                            {% endfor %}
+
+                            {% comment %}
+                            {% for task in tasks %}
+                            {% firstof task "<strong>no available tasks<strong>" %}
+                                {% endfor %}
+                                {% endcomment %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% include "includes/statistic.html" %}
+            </div>
+        </div>
+    </div>
+{% elif title == 'About task' %}
+    <div class="single-product-area section-padding-100 clearfix">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mt-50">
+                            <li class="breadcrumb-item"><a href="{% url 'taskboard:all_tasks' %}">All Tasks</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'taskboard:about_task' task.pk %}">Task detail</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-7">
+                    <div class="single_product_thumb">
+                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li class="active" data-target="#product_details_slider" data-slide-to="0"
+                                    style="background-image: url({% static 'img/img_.jpg'%})">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="1"
+                                    style="background-image: url({% static 'img/why.jpg' %})">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="2"
+                                    style="background-image: url({% static 'img/fine.jpg' %}">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="3"
+                                    style="background-image: url({% static 'img/scale_1200.jpeg' %})">
+                                </li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <a class="gallery_img" href="{% static 'img/img_.jpg' %}">
+                                        <img style="width: 250px; height: 500px; box-sizing: content-box"
+                                             class="d-block w-100" src="{% static 'img/img_.jpg' %}">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="{% static 'img/why.jpg' %}">
+                                        <img style="width: 250px; height: 500px; box-sizing: content-box"
+                                             class="d-block w-100" src="{% static 'img/why.jpg' %}">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="{% static 'img/fine.jpg' %}">
+                                        <img style="width: 250px; height: 500px; box-sizing: content-box"
+                                             class="d-block w-100" src="{% static 'img/fine.jpg' %}">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="{% static 'img/scale_1200.jpeg' %}">
+                                        <img style="width: 250px; height: 500px; box-sizing: content-box"
+                                             class="d-block w-100" src="{% static 'img/scale_1200.jpeg' %}">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="single_product_desc">
+                        <!-- Product Meta Data -->
+                        <div class="product-meta-data">
+                            <div class="line"></div>
+                            <p>{{ task.published }} - (создано {{ task.published|timesince }} назад)</p>
+                            <p>до окончания срока - {{task.deadline|timeuntil}}</p>
+                            <a href="{% url 'taskboard:about_task' task.pk %}">
+                                <h6>{{task.title|capfirst}}</h6>
+                            </a>
+                            <!-- Ratings & Review -->
+                            <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
+                                <div class="ratings">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <p class="avaibility"><i class="fa fa-circle"></i>{% if task.status == 'n' or task.status == 'p' %}
+                                Available to do {% else %} Done {% endif %}</p>
+                        </div>
+
+                        <div class="short_overview my-5">
+                            {% if task.description.rendered %}
+                                <p>{{ task.description.rendered }}</p>
+                            {% else %}
+                                {% lorem 1 p random %}
+                            {% endif %}
+                        </div>
+
+                        <p>Done date: {{ task.done_date|default:"not finished" }}</p>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <select class="w-100" name="status">
+                                {% if task.status == "n" %}
+                                    <option id='status_n' value="n" selected>Not started</option>
+                                    <option id='status_p' value="p">In process</option>
+                                    <option id='status_d' value="d">Done</option>
+                                {% elif task.status == "p" %}
+                                    <option id='status_n' value="n">Not started</option>
+                                    <option id='status_p' value="p" selected>In process</option>
+                                    <option id='status_d' value="d">Done</option>
+                                {% elif task.status == "d" %}
+                                    <option id='status_d' value="d" selected>Done</option>
+                                    <option id='status_n' value="n">Not started</option>
+                                    <option id='status_p' value="p">In process</option>
+                                {% endif %}
+                            </select>
+                            <button style="margin-top: 20px;" class="btn amado-btn mb-15" type="submit">Renew status
+                            </button>
+                        </form>
+                        <a href="{% url 'taskboard:delete_task' task.pk %}" class="btn amado-btn active">Delete task</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% elif title == 'Create icecream' %}
+<div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+                        <div class="cart-title">
+                            <h2>Create Task</h2>
+                        </div>
+
+                        <form action="{% url 'taskboard:create_icecream' %}" method="POST">
+                            {% csrf_token %}
+                            {% if message %}
+                            <p>{{ message}}</p>
+                            {% endif %}
+                            {% for field in icecream_form %}
+                                {% if field.name in special_fields %}
+                                    <ul class="hidden">
+                                        <li class="custom-class-for-p">
+                                            {{ field.errors }}
+                                            {{ field.label_tag }} {{ field }}
+                                            {% if field.help_text %}
+                                                <p class="help">{{ field.help_text }}</p>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                {% else %}
+                                    <ul>
+                                        <li class="custom-class-for-p">
+                                            {{ field.errors }}
+                                            {{ field.label_tag }} {{ field }}
+                                            {% if field.help_text %}
+                                                <p class="help">{{ field.help_text }}</p>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            {% endfor %}
+                            {{ cap_form.as_p }}
+                            {% if cap_form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in cap_form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            {% for field in cap_form %}
+                                {% if field.errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in field.errors %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button style="margin-right: 20px; margin-left: 13px" class="btn amado-btn mb-15"
+                                    type="submit">Create
+                            </button>
+                            <a href="{% url 'taskboard:icecream' %}" class="btn amado-btn active">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% elif title == 'Icecream' %}
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="cart-title mt-50">
+                        <h2>Icecream</h2>
+                    </div>
+
+                    <div class="cart-table clearfix">
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Наименование</th>
+                                <th>Производитель</th>
+                                <th>Стоимость</th>
+                                <th>Вес нетто</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for iccrm in icecream %}
+                            <tr>
+                                <td class="cart_product_img">
+                                    <img src="{% static 'img/img_.jpg' %}">
+                                </td>
+                                <td class="cart_product_desc">
+                                    <h5>{{ iccrm.name|capfirst }}</h5>
+                                </td>
+                                <td class="price">
+                                    <h5>{{ iccrm.fabricator|capfirst }}</h5>
+                                </td>
+                                <td class="qty">
+                                    <h5>{{ iccrm.price|capfirst }}</h5>
+                                </td>
+                                    <h5>{{ task.weight|capfirst }}</h5>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            No available icecream
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% elif title == 'Edit task' %}
+    <form id='edit_form' method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+            {% if message %}
+                {{ message }}
+            {% endif %}
+            {% if formset.non_form_errors %}
+            <ul>
+                {% for error in formset.non_form_errors %}
+                    <li><em>{{ error|escape }}</em></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% for form in formset %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% if form.non_field_errors %}
+                <ul>
+                    {% for error in form.non_field_errors %}
+                    <li><em>{{ error | escape }}</em></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% for field in form.visible_fields %}
+                    {% if field.errors %}
+                    <ul>
+                        {% for error in field.errors %}
+                        <li><em>{{ error|escape }}</em></li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <p data-form_prefix="{{ form.prefix }}" data-form_id="{{ form.instance.id }}">{{ field.label_tag }}<br>{{ field }}<br>{{ field.help_text }}</p>
+                {% endfor %}
+            {% endfor %}
+        <button style="margin-right: 20px; margin-left: 13px" class="btn amado-btn mb-15" type="submit">Save</button>
+        <a href="{% url 'taskboard:all_tasks' %}" class="btn amado-btn active">Cancel</a>
+    </form>
+{% elif title == 'Create subscribe' %}
+    <div>
+        <label style="margin-top: 50px;">Адрес электронной почты</label>
+        <textarea readonly=true>{{ email }}</textarea>
+        <form id='' method="post" >
+            {% csrf_token %}
+           {% for field in form %}
+            <div>
+                {{ field.label_tag }} {{ field }}
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button style="margin-right: 20px; margin-left: 13px" class="btn amado-btn mb-15" type="submit">Save</button>
+            <a href="{% url 'taskboard:all_tasks' %}" class="btn amado-btn active">Cancel</a>
+        </form>
+    </div>
+{% endif %}

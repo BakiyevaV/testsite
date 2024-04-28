@@ -1,0 +1,7 @@
+<div class="main-content-wrapper d-flex clearfix">
+    {% include "includes/header.html" %}
+    {% include "includes/main_content.html" %}
+    {% if title == 'All tasks' %}
+        {% include "includes/paginator.html" %}
+    {% endif %}
+</div>
